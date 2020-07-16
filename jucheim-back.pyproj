@@ -37,6 +37,19 @@
     <Compile Include="app\views.py" />
     <Compile Include="app\__init__.py" />
     <Compile Include="app\migrations\__init__.py" />
+    <Compile Include="jucheim_back\core\admin.py" />
+    <Compile Include="jucheim_back\core\apps.py" />
+    <Compile Include="jucheim_back\core\migrations\__init__.py" />
+    <Compile Include="jucheim_back\core\models.py" />
+    <Compile Include="jucheim_back\core\serializers.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="jucheim_back\core\tests.py" />
+    <Compile Include="jucheim_back\core\urls.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="jucheim_back\core\views.py" />
+    <Compile Include="jucheim_back\core\__init__.py" />
     <Compile Include="manage.py" />
     <Compile Include="jucheim_back\__init__.py" />
     <Compile Include="jucheim_back\settings.py" />
@@ -54,8 +67,13 @@
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
     <Folder Include="jucheim_back\" />
+    <Folder Include="jucheim_back\core\" />
+    <Folder Include="jucheim_back\core\migrations\" />
+    <Folder Include="jucheim_back\core\templates\" />
+    <Folder Include="jucheim_back\core\templates\core\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="jucheim_back\core\templates\core\index.html" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />
