@@ -45,10 +45,20 @@ class LargeResultsSetPagination(PageNumberPagination):
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
-    http_method_names = ('get','post','put')
+    http_method_names = ['get','post','put','options']
     permission_classes = (AllowAny,)
     serializer_class = CategorySerializer
 
     def get_queryset(self):
         queryset = self.queryset           
+        return queryset
+
+class ProductsViewSet(ListAPIView):
+    queryset = Products.objects.all()
+    http_method_names = ['get','post','put','options']
+    permission_classes = (AllowAny,)
+    serializer_class = ProductsSerializer
+
+    def get_queryset(self):
+        queryset = self.queryset.filter(category = self.kwargs['pk'])           
         return queryset

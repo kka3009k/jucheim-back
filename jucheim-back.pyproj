@@ -5,6 +5,7 @@
     <Name>jucheim-back</Name>
     <RootNamespace>jucheim-back</RootNamespace>
     <InterpreterId>MSBuild|juc_env|$(MSBuildProjectFullPath)</InterpreterId>
+    <WebBrowserPort>3009</WebBrowserPort>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -21,6 +22,8 @@
     <DjangoSettingsModule>jucheim_back.settings</DjangoSettingsModule>
     <OutputPath>.</OutputPath>
     <SuppressCollectPythonCloudServiceFiles>true</SuppressCollectPythonCloudServiceFiles>
+    <PythonRunWebServerCommandType />
+    <PythonDebugWebServerCommandType />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>

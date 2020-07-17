@@ -5,3 +5,11 @@ from .models import *
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
+
+class PhotoProductsAdmin(admin.TabularInline):
+    model = PhotoProducts
+
+@admin.register(Products)
+class ProductsAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    inlines = [PhotoProductsAdmin]

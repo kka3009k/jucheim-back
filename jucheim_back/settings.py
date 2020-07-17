@@ -62,6 +62,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'jucheim_back.urls'
@@ -128,7 +130,7 @@ REST_FRAMEWORK = {
             'django_filters.rest_framework.DjangoFilterBackend',),
         'DEFAULT_PAGINATION_CLASS':
             'rest_framework.pagination.LimitOffsetPagination',
-        'EXCEPTION_HANDLER': 'ebrr.utils.exceptions.custom_exception_handler',
+        #'EXCEPTION_HANDLER': 'ebrr.utils.exceptions.custom_exception_handler',
         'PAGE_SIZE': 10,
         'DATETIME_FORMAT': "%Y-%m-%dT%H:%M"
     }

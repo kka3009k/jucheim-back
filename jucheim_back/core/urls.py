@@ -7,10 +7,15 @@ from django.urls import path
 
 
 router = DefaultRouter()
-router.register('category', CategoryViewSet, basename='category')
+router.register(r'categories', CategoryViewSet, basename='category')
+#router.register(r'products', ProductsViewSet, basename='products')
 #router.register('staff', StaffViewSet, base_name='staff')
 urlpatterns = router.urls
 urlpatterns += [
+    re_path(r'^products/(?P<pk>[0-9]+)/$', ProductsViewSet.as_view(),
+           name='products'),
+    #re_path(r'^categories/$', CategoryViewSet.as_view(),
+            #name='categories'),
     #re_path(r'^application_references/(?P<reference>\w+)/$', ApplicationReferenceView.as_view(),
     #        name='application_references'),
     #re_path(r'^credit/$', CreditRequestView.as_view(),
@@ -19,8 +24,6 @@ urlpatterns += [
     #        name='credits_create_api'),
     #re_path(r'^credit/program/$', ProgramInRequestListView.as_view(),
     #        name='credit_program_list'),
-    #re_path(r'^credit/(?P<pk>[0-9]+)/$', CreditRequestInfoView.as_view(),
-    #        name='credit_info'),
     #re_path(r'^credit/(?P<pk>[0-9]+)/request_to_kib/$', CreditRequestToKibView.as_view(),
     #        name='credit_info_request_to_kib'),
     #re_path(r'^credit/(?P<pk>[0-9]+)/change_status/$', CreditStatusChangeView.as_view(),
