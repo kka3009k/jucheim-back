@@ -13,3 +13,8 @@ class PhotoProductsAdmin(admin.TabularInline):
 class ProductsAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
     inlines = [PhotoProductsAdmin]
+
+@admin.register(Banners)
+class BannersAdmin(admin.ModelAdmin):
+    list_display = ('id','category','product','photo_banner')
+ 

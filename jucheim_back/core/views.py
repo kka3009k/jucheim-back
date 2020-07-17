@@ -62,3 +62,28 @@ class ProductsViewSet(ListAPIView):
     def get_queryset(self):
         queryset = self.queryset.filter(category = self.kwargs['pk'])           
         return queryset
+
+class ProductInfoView(RetrieveUpdateAPIView):
+    serializer_class = ProductInfoSerializer
+    queryset = Products.objects.all()
+    permission_classes = (AllowAny,)
+    filter_backends = (DjangoFilterBackend, SearchFilter)
+    search_fields = ('id', 'name', )
+
+    def get_queryset(self):
+        queryset = self.queryset.filter(id = self.kwargs['pk'])           
+        return queryset
+
+class BannersView(viewsets.ModelViewSet):
+    serializer_class = BannersSerializer
+    queryset = Banners.objects.all()
+    permission_classes = (AllowAny,)
+    filter_backends = (DjangoFilterBackend, SearchFilter)
+    search_fields = ('id', 'name', )
+
+    def get_queryset(self):
+        queryset = self.queryset        
+        return queryset
+    
+
+   

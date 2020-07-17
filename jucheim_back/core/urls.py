@@ -8,12 +8,15 @@ from django.urls import path
 
 router = DefaultRouter()
 router.register(r'categories', CategoryViewSet, basename='category')
+router.register(r'banners', BannersView, basename='banners')
 #router.register(r'products', ProductsViewSet, basename='products')
 #router.register('staff', StaffViewSet, base_name='staff')
 urlpatterns = router.urls
 urlpatterns += [
     re_path(r'^products/(?P<pk>[0-9]+)/$', ProductsViewSet.as_view(),
            name='products'),
+    re_path(r'^product_info/(?P<pk>[0-9]+)/$', ProductInfoView.as_view(),
+           name='product_info'),
     #re_path(r'^categories/$', CategoryViewSet.as_view(),
             #name='categories'),
     #re_path(r'^application_references/(?P<reference>\w+)/$', ApplicationReferenceView.as_view(),

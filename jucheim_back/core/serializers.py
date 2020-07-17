@@ -23,4 +23,34 @@ class ProductsSerializer(serializers.ModelSerializer):
         model = Products
         fields = ('__all__')
 
+    def to_representation(self, instance):
+        representation = super(ProductsSerializer, self).to_representation(instance)
+        representation['category_name'] = CategorySerializer(instance.category).data
+        #representation['credit_docs'] = CreditDoc.objects.filter(credit)
+        return representation
+
+
+class ProductInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Products
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        representation = super(ProductInfoSerializer, self).to_representation(instance)
+        representation['category_name'] = CategorySerializer(instance.category).data
+        representation['photos'] = PhotoProductsSerializer(instance.photo_product.all(),
+                                                         many=True).data
+        #representation['credit_docs'] = CreditDoc.objects.filter(credit)
+        return representation
+
+class PhotoProductsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PhotoProducts
+        fields = ('__all__')
+
+class BannersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Banners
+        fields = ('__all__')
+
 
