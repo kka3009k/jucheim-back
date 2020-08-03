@@ -7,8 +7,8 @@ from django.urls import path
 
 
 router = DefaultRouter()
-router.register(r'categories', CategoryViewSet, basename='category')
-router.register(r'banners', BannersView, basename='banners')
+router.register(r'categories', CategoryViewSet, base_name='category')
+router.register(r'banners', BannersView, base_name='banners')
 #router.register(r'products', ProductsViewSet, basename='products')
 #router.register('staff', StaffViewSet, base_name='staff')
 urlpatterns = router.urls
