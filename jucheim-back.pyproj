@@ -5,7 +5,7 @@
     <Name>jucheim-back</Name>
     <RootNamespace>jucheim-back</RootNamespace>
     <InterpreterId>Global|PythonCore|3.8-32</InterpreterId>
-    <WebBrowserPort>3009</WebBrowserPort>
+    <WebBrowserPort>3008</WebBrowserPort>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>

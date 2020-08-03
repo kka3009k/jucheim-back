@@ -54,3 +54,30 @@ class BannersSerializer(serializers.ModelSerializer):
         fields = ('__all__')
 
 
+class OrdersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Orders
+        fields = ('__all__')
+
+    def to_representation(self, instance):
+        representation = super(OrdersSerializer, self).to_representation(instance)
+        representation['product_info'] = ProductsSerializer(instance.product).data
+        #representation['credit_docs'] = CreditDoc.objects.filter(credit)
+        return representation
+
+class OrdersAddSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Orders
+        fields = ('__all__')
+
+    def validate(self, attrs):
+        return attrs
+
+    def create(self, validated_data):
+        instance = Orders(**validated_data)
+        instance.fin_institute = self.context['request'].user.fin_institute
+        # instance.city = self.context['request'].user.city
+        instance.manager = self.context['request'].user
+        instance.status = constants.IN_PROGRESS
+        instance.save()
+        return instance

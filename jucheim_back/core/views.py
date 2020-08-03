@@ -84,6 +84,65 @@ class BannersView(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = self.queryset        
         return queryset
+
+
+class OrdersView(ListCreateAPIView):
+    serializer_class = OrdersSerializer
+    queryset = Orders.objects.all()
+    permission_classes = (AllowAny,)
+
+    def get_queryset(self):
+        print(self.kwargs['cookie'])
+        queryset = self.queryset.filter(user_coockie = self.kwargs['cookie']).order_by('-product')      
+        return queryset
+
+    def create(self, request, *args, **kwargs):
+        order_data = {
+            'product': request.data['id'],
+            'user_coockie': request.data['coockie'],
+            'quantity': request.data['quantity']
+            }
+        if Orders.objects.filter(user_coockie=request.data['coockie'], product = request.data['id']).exists():
+            if request.data['quantity'] == 0:
+                Orders.objects.filter(user_coockie=request.data['coockie'], product = request.data['id']).delete()
+            else:
+                order = Orders.objects.get(user_coockie=request.data['coockie'], product = request.data['id'])
+                order.quantity = order.quantity + request.data['quantity']
+                if order.quantity < 1:
+                    order.quantity = 0
+                order.save()
+        else:
+            serializer = self.get_serializer(data=order_data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        countOrders = Orders.objects.filter(user_coockie = request.data['coockie']).count()
+        return Response(data = {'countOrders':countOrders} , status=201)
+
+
+
+
+class GuestUserView(ListCreateAPIView):
+    queryset = GuestUser.objects.all()
+    permission_classes = (AllowAny,)
+
+    def get_queryset(self):
+        queryset = self.queryset 
+        return queryset
+
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        user = None
+        try :
+            if data['userId']:
+               user =  GuestUser.objects.get(id = data['userId'] )
+            else:
+               user = GuestUser.objects.create()
+            return Response(data={'userId':user.id}, status=status.HTTP_201_CREATED)
+        except Exception as ex:
+           return Response(data="Error", status=status.HTTP_400_BAD_REQUEST)
+
+
+
     
 
    
