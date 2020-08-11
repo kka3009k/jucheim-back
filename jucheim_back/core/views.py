@@ -115,10 +115,61 @@ class OrdersView(ListCreateAPIView):
             serializer = self.get_serializer(data=order_data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-        countOrders = Orders.objects.filter(user_coockie = request.data['coockie']).count()
+        countOrders = Orders.objects.filter(user_coockie = request.data['coockie'], isOpen = True).count()
         return Response(data = {'countOrders':countOrders} , status=201)
 
 
+class ReqgistrationOrder(APIView):
+    permission_classes = (AllowAny,)
+    def get(self, request, *args, **kwargs):
+        cookie = self.kwargs['cookie']
+        """ Если в корзина не пуста """
+        if Orders.objects.filter(user_coockie = cookie, isOpen = True).exists():
+            orders = Orders.objects.filter(user_coockie = cookie, isOpen = True)
+            if ReqistrationOrder.objects.filter(user_coockie = cookie, isDecoration = False).exists():
+                registr = ReqistrationOrder.objects.get(user_coockie = cookie, isDecoration = False)
+                registr.orders = self.get_orders(orders)
+                registr.save()
+                return Response(data = 1, status=200)
+            else:
+                newRegistr = ReqistrationOrder.objects.create(orders = self.get_orders(orders),user_coockie = cookie)
+                return Response(data = 1, status=200)
+
+        else:
+            """ Если пуста"""
+            if ReqistrationOrder.objects.filter(user_coockie = cookie, isDecoration = False).exists():
+               ReqistrationOrder.objects.filter(user_coockie = cookie, isDecoration = False).delete()
+               return Response(data = None,status=200)
+            else:
+                return Response(data = None,status=200)
+
+    def post(self, request, *args, **kwargs):
+        cookie = self.kwargs['cookie']
+        """ Если в корзина не пуста """
+        if Orders.objects.filter(user_coockie = cookie, isOpen = True).exists():
+            orders = Orders.objects.filter(user_coockie = cookie, isOpen = True)
+            if ReqistrationOrder.objects.filter(user_coockie = cookie, isDecoration = False).exists():
+                registr = ReqistrationOrder.objects.get(user_coockie = cookie, isDecoration = False)
+                registr.orders = self.get_orders(orders)
+                registr.save()
+                return Response(data = 1, status=200)
+            else:
+                newRegistr = ReqistrationOrder.objects.create(orders = self.get_orders(orders),user_coockie = cookie)
+                return Response(data = 1, status=200)
+
+        else:
+            """ Если пуста"""
+            if ReqistrationOrder.objects.filter(user_coockie = cookie, isDecoration = False).exists():
+               ReqistrationOrder.objects.filter(user_coockie = cookie, isDecoration = False).delete()
+               return Response(data = None,status=200)
+            else:
+                return Response(data = None,status=200)
+    
+    def get_orders(self, orders):
+        orders_id = [];
+        for i in orders:
+            orders_id.append(i.id)
+        return orders_id
 
 
 class GuestUserView(ListCreateAPIView):

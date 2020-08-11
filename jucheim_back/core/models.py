@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.postgres.fields import ArrayField, JSONField
 
 # Create your models here.
 class Category(models.Model):
@@ -7,6 +8,8 @@ class Category(models.Model):
         verbose_name_plural = 'Категория'
 
     name = models.CharField(max_length=1000, verbose_name='Наименование')
+    def __str__(self):
+        return self.name
 
 class Products(models.Model):
     class Meta:
@@ -52,10 +55,29 @@ class Orders(models.Model):
                                     on_delete=models.SET_NULL,help_text=("Продукта"))
     quantity = models.IntegerField(default = 0,null = True)
     user_coockie = models.CharField(max_length = 255, null=True)
+    isOpen = models.BooleanField(default = True)
+
+class ReqistrationOrder(models.Model):
+    class Meta:
+        verbose_name = 'Оформленый заказ'
+        verbose_name_plural = 'Оформленные заказы'
+
+    orders = ArrayField(models.IntegerField(), blank=True, default=list, verbose_name='Заказы',help_text=("Заказы"))
+    sum = models.FloatField(default=0,null=True)
+    address = models.CharField(max_length=1000, null=True)
+    contact_phone = models.CharField(max_length=30, null=True)
+    email = models.EmailField(null=True)
+    full_name = models.CharField(max_length=1000, null=True)
+    date_registration = models.DateTimeField(null=True)
+    isDecoration = models.BooleanField(default=False)
+    user_coockie = models.CharField(max_length=255, null=True)
+
 
 class GuestUser(models.Model):
     class Meta:
         verbose_name = 'Гостевой юзер'
         verbose_name_plural = 'Гостевые юзеры'
+
+
 
     

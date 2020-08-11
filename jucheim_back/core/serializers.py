@@ -65,19 +65,3 @@ class OrdersSerializer(serializers.ModelSerializer):
         #representation['credit_docs'] = CreditDoc.objects.filter(credit)
         return representation
 
-class OrdersAddSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Orders
-        fields = ('__all__')
-
-    def validate(self, attrs):
-        return attrs
-
-    def create(self, validated_data):
-        instance = Orders(**validated_data)
-        instance.fin_institute = self.context['request'].user.fin_institute
-        # instance.city = self.context['request'].user.city
-        instance.manager = self.context['request'].user
-        instance.status = constants.IN_PROGRESS
-        instance.save()
-        return instance

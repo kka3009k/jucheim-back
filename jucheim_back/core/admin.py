@@ -17,4 +17,8 @@ class ProductsAdmin(admin.ModelAdmin):
 @admin.register(Banners)
 class BannersAdmin(admin.ModelAdmin):
     list_display = ('id','category','product','photo_banner')
+
+@admin.register(ReqistrationOrder)
+class ReqistrationOrderAdmin(admin.ModelAdmin):
+    list_display = ('id','user_coockie','isDecoration')
  

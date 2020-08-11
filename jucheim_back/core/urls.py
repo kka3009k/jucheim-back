@@ -7,8 +7,8 @@ from django.urls import path
 
 
 router = DefaultRouter()
-router.register(r'categories', CategoryViewSet, base_name='category')
-router.register(r'banners', BannersView, base_name='banners')
+router.register(r'categories', CategoryViewSet)
+router.register(r'banners', BannersView)
 #router.register(r'products', ProductsViewSet, basename='products')
 #router.register('staff', StaffViewSet, base_name='staff')
 urlpatterns = router.urls
@@ -23,6 +23,10 @@ urlpatterns += [
            name='orders_count'),
     re_path(r'guest/get_user/$', GuestUserView.as_view(),
             name='get_guest_user'),
+    re_path(r'^orders/decoration/(?P<cookie>[-1-9]+)/$', ReqgistrationOrder.as_view(),
+            name='init_decoration'),
+    re_path(r'^orders/decoration/$', ReqgistrationOrder.as_view(),
+            name='decoration_orders'),
     #re_path(r'^categories/$', CategoryViewSet.as_view(),
             #name='categories'),
     #re_path(r'^application_references/(?P<reference>\w+)/$', ApplicationReferenceView.as_view(),
