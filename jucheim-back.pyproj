@@ -53,6 +53,11 @@
     </Compile>
     <Compile Include="jucheim_back\core\views.py" />
     <Compile Include="jucheim_back\core\__init__.py" />
+    <Compile Include="jucheim_back\utils\exeptions.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="jucheim_back\utils\migrations\__init__.py" />
+    <Compile Include="jucheim_back\utils\__init__.py" />
     <Compile Include="manage.py" />
     <Compile Include="jucheim_back\__init__.py" />
     <Compile Include="jucheim_back\settings.py" />
@@ -74,9 +79,14 @@
     <Folder Include="jucheim_back\core\migrations\" />
     <Folder Include="jucheim_back\core\templates\" />
     <Folder Include="jucheim_back\core\templates\core\" />
+    <Folder Include="jucheim_back\utils\" />
+    <Folder Include="jucheim_back\utils\migrations\" />
+    <Folder Include="jucheim_back\utils\templates\" />
+    <Folder Include="jucheim_back\utils\templates\utils\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="jucheim_back\core\templates\core\index.html" />
+    <Content Include="jucheim_back\utils\templates\utils\index.html" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />

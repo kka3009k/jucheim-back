@@ -35,6 +35,7 @@ from .models import *
 #import cv2
 import os
 from django.contrib.staticfiles.views import serve
+from jucheim_back.utils.exeptions import * 
 
 
 class LargeResultsSetPagination(PageNumberPagination):
@@ -93,7 +94,7 @@ class OrdersView(ListCreateAPIView):
 
     def get_queryset(self):
         print(self.kwargs['cookie'])
-        queryset = self.queryset.filter(user_coockie = self.kwargs['cookie']).order_by('-product')      
+        queryset = self.queryset.filter(user_coockie = self.kwargs['cookie'],  isOpen = True).order_by('-product')      
         return queryset
 
     def create(self, request, *args, **kwargs):
@@ -102,11 +103,11 @@ class OrdersView(ListCreateAPIView):
             'user_coockie': request.data['coockie'],
             'quantity': request.data['quantity']
             }
-        if Orders.objects.filter(user_coockie=request.data['coockie'], product = request.data['id']).exists():
+        if Orders.objects.filter(user_coockie=request.data['coockie'], product = request.data['id'], isOpen = True).exists():
             if request.data['quantity'] == 0:
-                Orders.objects.filter(user_coockie=request.data['coockie'], product = request.data['id']).delete()
+                Orders.objects.filter(user_coockie=request.data['coockie'], product = request.data['id'], isOpen = True).delete()
             else:
-                order = Orders.objects.get(user_coockie=request.data['coockie'], product = request.data['id'])
+                order = Orders.objects.get(user_coockie=request.data['coockie'], product = request.data['id'], isOpen = True)
                 order.quantity = order.quantity + request.data['quantity']
                 if order.quantity < 1:
                     order.quantity = 0
@@ -130,10 +131,9 @@ class ReqgistrationOrder(APIView):
                 registr = ReqistrationOrder.objects.get(user_coockie = cookie, isDecoration = False)
                 registr.orders = self.get_orders(orders)
                 registr.save()
-                return Response(data = 1, status=200)
             else:
                 newRegistr = ReqistrationOrder.objects.create(orders = self.get_orders(orders),user_coockie = cookie)
-                return Response(data = 1, status=200)
+            return Response(data = self.calc_sum_order(orders), status=200)
 
         else:
             """ Если пуста"""
@@ -144,32 +144,59 @@ class ReqgistrationOrder(APIView):
                 return Response(data = None,status=200)
 
     def post(self, request, *args, **kwargs):
-        cookie = self.kwargs['cookie']
+        data = request.data
+        print(data)
+        cookie = data['user_coockie']
         """ Если в корзина не пуста """
         if Orders.objects.filter(user_coockie = cookie, isOpen = True).exists():
             orders = Orders.objects.filter(user_coockie = cookie, isOpen = True)
             if ReqistrationOrder.objects.filter(user_coockie = cookie, isDecoration = False).exists():
                 registr = ReqistrationOrder.objects.get(user_coockie = cookie, isDecoration = False)
                 registr.orders = self.get_orders(orders)
+                registr.address = data['address']
+                registr.contact_phone = data['contact_phone']
+                registr.email = data['email']
+                registr.full_name = data['full_name']
+                registr.sum = self.calc_sum_order(orders)
+                registr.isDecoration = True
                 registr.save()
-                return Response(data = 1, status=200)
+                self.close_orders(orders)
             else:
                 newRegistr = ReqistrationOrder.objects.create(orders = self.get_orders(orders),user_coockie = cookie)
-                return Response(data = 1, status=200)
+                newRegistr.address = data['address']
+                newRegistr.contact_phone = data['contact_phone']
+                newRegistr.email = data['email']
+                newRegistr.full_name = data['full_name']
+                newRegistr.sum = self.calc_sum_order(orders)
+                newRegistr.isDecoration = True
+                newRegistr.save()
+                self.close_orders(orders)
+            return Response(data = {'status_reg':True}, status=200)
 
         else:
             """ Если пуста"""
             if ReqistrationOrder.objects.filter(user_coockie = cookie, isDecoration = False).exists():
                ReqistrationOrder.objects.filter(user_coockie = cookie, isDecoration = False).delete()
-               return Response(data = None,status=200)
+               raise CommonException(detail='Добавьте товар в корзину')
             else:
-                return Response(data = None,status=200)
+               raise CommonException(detail='Добавьте товар в корзину')
     
     def get_orders(self, orders):
         orders_id = [];
         for i in orders:
             orders_id.append(i.id)
         return orders_id
+
+    def calc_sum_order(self, orders):
+        sum = 0
+        for i in orders:
+            sum = sum + i.quantity * i.product.price
+        return sum
+
+    def close_orders(self, orders):
+        for i in orders:
+            i.isOpen = False
+            i.save()
 
 
 class GuestUserView(ListCreateAPIView):
